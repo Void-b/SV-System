@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SV-System</string>
+    <string name="qr_code">qr_code</string>
+    <string name="enter_your_name">Enter Student Name</string>
+    <string name="enter_your_reg_no">Enter Student Reg Number</string>
+    <string name="generate_qr_code">Generate Student QR Code Card</string>
+    <string name="turn_on_flashlight">Turn on Flashlight</string>
+    <string name="turn_off_flashlight">Turn off Flashlight</string>
+</resources>

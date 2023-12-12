@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:id="@+id/card"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="@color/green"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="20dp"
+        android:layout_height="240dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/background"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="FUTO SV-SYSTEM"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:textSize="25dp"
+                    android:textColor="@color/mid_black"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textSize="17dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/mid_black"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Student Name"
+                    android:layout_marginRight="105dp"
+                    android:textSize="18dp"
+                    android:maxLines="1"
+                    android:id="@+id/scanstudentname"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Department"
+                    android:textSize="17dp"
+                    android:textColor="@color/mid_black"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Student's Department"
+                    android:textSize="18dp"
+                    android:layout_marginRight="105dp"
+                    android:id="@+id/scanstudentdepart"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:text="Reg No (Mat no)"
+                    android:id="@+id/stay"
+                    android:layout_marginTop="15dp"
+                    android:textSize="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/mid_black"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:text="***********"
+                    android:layout_marginTop="-7dp"
+                    android:id="@+id/scanstudentReg"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    android:layout_below="@id/stay"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/off_white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".GenerateStudentBarCode">
+
+    <!--We are using this image
+        view to display our QR code-->
+    <androidx.cardview.widget.CardView
+        android:layout_width="380dp"
+        android:id="@+id/card"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="20dp"
+        android:layout_height="220dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_new"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="FUTO SV-SYSTEM"
+                    android:textColor="@color/black"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Name"
+                    android:textColor="@color/grey"
+                    android:textSize="17dp" />
+
+                <TextView
+                    android:id="@+id/studentname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="105dp"
+                    android:maxLines="1"
+                    android:text="Student Name"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Department"
+                    android:textColor="@color/grey"
+                    android:textSize="17dp" />
+
+                <TextView
+                    android:id="@+id/studentdepart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="105dp"
+                    android:maxLines="1"
+                    android:text="Student's Department"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/idIVQrcode"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="60dp"
+                android:layout_marginRight="20dp"
+                android:contentDescription="@string/qr_code" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reg No (Mat no)"
+                android:id="@+id/stay"
+                android:layout_marginTop="15dp"
+                android:textSize="10dp"
+                android:layout_below="@id/idIVQrcode"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/grey"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="***********"
+                android:layout_marginTop="-7dp"
+                android:id="@+id/studentReg"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:layout_below="@id/stay"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints=""
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey"
+        android:hint="@string/enter_your_name"
+        android:inputType="text" />
+    <EditText
+        android:id="@+id/regno"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints=""
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey"
+        android:hint="@string/enter_your_reg_no"
+        android:inputType="number" />
+    <EditText
+        android:id="@+id/department"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/regno"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints=""
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey"
+        android:hint="Enter Student Department"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/idBtnGenerateQR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textSize="17dp"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_above="@id/printCard"
+        android:text="@string/generate_qr_code" />
+    <androidx.cardview.widget.CardView
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:id="@+id/printCard"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/green"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="50dp">
+        <TextView
+            android:id="@+id/idBtnSaveID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="17dp"
+            android:text="Print Card" />
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
