@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".PreviewSave">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:id="@+id/card"
-        android:layout_centerInParent="true"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
+        android:elevation="10dp"
+        android:layout_margin="20dp"
         android:layout_height="230dp">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -49,17 +53,17 @@
                         android:layout_marginTop="10dp"
                         android:text="Name"
                         android:textColor="@color/grey"
-                        android:textSize="15dp" />
+                        android:textSize="17dp" />
 
                     <TextView
-                        android:id="@+id/scanstudentname"
+                        android:id="@+id/studentname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="105dp"
                         android:maxLines="1"
                         android:text="Student Name"
                         android:textColor="@color/black"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -68,17 +72,17 @@
                         android:layout_marginTop="5dp"
                         android:text="Department"
                         android:textColor="@color/grey"
-                        android:textSize="15dp" />
+                        android:textSize="17dp" />
 
                     <TextView
-                        android:id="@+id/scanstudentdepart"
+                        android:id="@+id/studentdepart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="105dp"
                         android:maxLines="1"
                         android:text="Student's Department"
                         android:textColor="@color/black"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -88,23 +92,14 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/futo_logo"/>
-            <RelativeLayout
-                android:layout_marginTop="60dp"
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/idIVQrcode"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="60dp"
                 android:layout_marginRight="20dp"
-                android:id="@+id/imghold"
-                android:layout_height="wrap_content">
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"/>
-                <ImageView
-                    android:id="@+id/scanimageview"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:contentDescription="userimagedecoded" />
-            </RelativeLayout>
+                android:contentDescription="@string/qr_code" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -113,7 +108,7 @@
                 android:id="@+id/stay"
                 android:layout_marginTop="15dp"
                 android:textSize="10dp"
-                android:layout_below="@id/imghold"
+                android:layout_below="@id/idIVQrcode"
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/grey"/>
             <TextView
@@ -121,8 +116,8 @@
                 android:layout_height="wrap_content"
                 android:text="***********"
                 android:layout_marginTop="-7dp"
-                android:id="@+id/scanstudentReg"
-                android:textSize="25dp"
+                android:id="@+id/studentReg"
+                android:textSize="30dp"
                 android:textStyle="bold"
                 android:layout_below="@id/stay"
                 android:layout_centerHorizontal="true"
@@ -130,4 +125,42 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/goback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:cardBackgroundColor="@color/red"
+        app:cardCornerRadius="25dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="Go back"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_below="@id/goback"
+        android:id="@+id/save"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:text="Save"/>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/uploadprogress"
+        android:visibility="gone"
+        android:layout_below="@id/save"/>
 </RelativeLayout>

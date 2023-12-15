@@ -11,10 +11,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -26,10 +28,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.w3c.dom.Text;
+
+import java.io.File;
+import java.io.IOException;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -39,11 +49,17 @@ public class MainActivity extends AppCompatActivity {
     CardView scanBtn;
     private static final int PERMISSION_REQUEST_CAMERA = 1;
     private static final int PERMISSION_REQUEST_STORAGE = 2;
+    private ImageView imageView;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
 
         scanBtn = findViewById(R.id.scanQR);
         scanBtn.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
     public void displaydetailsindialog(String result){
         String lines[] = result.split("\\r?\\n");
         TextView name, reg, dept;
+//        ImageView imageView;
 
         LayoutInflater inflater = getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.student_details_display_view, null);
@@ -117,14 +134,47 @@ public class MainActivity extends AppCompatActivity {
         name = dialogLayout.findViewById(R.id.scanstudentname);
         reg = dialogLayout.findViewById(R.id.scanstudentReg);
         dept = dialogLayout.findViewById(R.id.scanstudentdepart);
+        imageView = dialogLayout.findViewById(R.id.scanimageview);
 
         name.setText(lines[0]);
-        reg.setText(lines[2]);
         dept.setText(lines[1]);
+        reg.setText(lines[2]);
+
+        loadUserImage(lines[2]);
+
         builder.setView(dialogLayout);
         builder.show();
     }
+    public void loadUserImage(String name){
+        StorageReference imageRef = storageRef.child("UserImages/"+name);
 
+        try {
+            // Download the image into a local file
+            final File localFile = File.createTempFile("images", "jpg");
+
+            imageRef.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            // Local file created successfully, load the image to ImageView
+                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle failed download
+                            imageView.setImageResource(R.drawable.user_image);
+                            Toast.makeText(MainActivity.this, "Failed:\n"+exception.getMessage()
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -137,10 +187,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 // Process the scanned data (result.getContents())
                 String scannedData = result.getContents();
-                // Display the scanned data, you can use a TextView or Toast to show it
-                // For example:
-                 Toast.makeText(this, scannedData, Toast.LENGTH_LONG).show();
-                 displaydetailsindialog(scannedData);
+                displaydetailsindialog(scannedData);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

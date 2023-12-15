@@ -3,13 +3,16 @@ package com.example.sv_system;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -21,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,157 +34,88 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 public class GenerateStudentBarCode extends AppCompatActivity {
 
-    QRGEncoder qrgEncoder;
-    private ImageView qrCodeIV;
     private EditText regno, name, department;
     private Button generateQrBtn;
     Bitmap bitmap;
-    CardView cardView, printcard;
-    TextView studentname, studentreg, studentdept;
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ImageView imageView;
+    String base64Image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_student_barcode);
         // initializing all variables.
-        qrCodeIV = findViewById(R.id.idIVQrcode);
         regno = findViewById(R.id.regno);
         name = findViewById(R.id.name);
         department = findViewById(R.id.department);
-        studentname = findViewById(R.id.studentname);
-        studentdept = findViewById(R.id.studentdepart);
-        studentreg = findViewById(R.id.studentReg);
         generateQrBtn = findViewById(R.id.idBtnGenerateQR);
-        printcard = findViewById(R.id.printCard);
-        cardView = findViewById(R.id.card);
+        imageView = findViewById(R.id.imageview);
+
 
         // initializing onclick listener for button.
         generateQrBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(regno.getText().toString())) {
-
-                    // if the edittext inputs are empty then execute
-                    // this method showing a toast message.
-                    Toast.makeText(GenerateStudentBarCode.this, "Enter some text to generate QR Code", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(regno.getText().toString()) &&
+                        TextUtils.isEmpty(name.getText().toString())&&
+                        TextUtils.isEmpty(department.getText().toString())) {
+                    Toast.makeText(GenerateStudentBarCode.this, "Ensure no fields are left empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    studentname.setText(name.getText().toString().trim());
-                    studentreg.setText(regno.getText().toString().trim());
-                    studentdept.setText(department.getText().toString().trim());
-                    // below line is for getting
-                    // the windowmanager service.
-                    WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-                    // initializing a variable for default display.
-                    Display display = manager.getDefaultDisplay();
-
-                    // creating a variable for point which
-                    // is to be displayed in QR Code.
-                    Point point = new Point();
-                    display.getSize(point);
-
-                    // getting width and
-                    // height of a point
-                    int width = point.x;
-                    int height = point.y;
-
-                    // generating dimension from width and height.
-                    int dimen = width < height ? width : height;
-                    dimen = dimen * 3 / 4;
-
-                    // setting this dimensions inside our qr code
-                    // encoder to generate our qr code.
-                    qrgEncoder = new QRGEncoder(
-                            name.getText().toString()+"\n"+
-                                    department.getText().toString()+"\n"+
-                                    regno.getText().toString()
-                            , null, QRGContents.Type.TEXT, dimen);
-                    qrgEncoder.setColorBlack(Color.WHITE);
-                    qrgEncoder.setColorWhite(Color.BLACK);
-                    try {
-                        // getting our qrcode in the form of bitmap.
-                        bitmap = qrgEncoder.getBitmap();
-                        // the bitmap is set inside our image
-                        // view using .setimagebitmap method.
-                        qrCodeIV.setImageBitmap(bitmap);
-                    } catch (Exception e) {
-                        // this method is called for
-                        // exception handling.
-                        Log.e("Tag", e.toString());
-                    }
+                    Intent intent = new Intent(GenerateStudentBarCode.this, PreviewSave.class);
+                    intent.putExtra("name", name.getText().toString().trim());
+                    intent.putExtra("regno", regno.getText().toString().trim());
+                    intent.putExtra("bitmap", bitmap);
+                    intent.putExtra("department", department.getText().toString().trim());
+                    startActivity(intent);
                 }
             }
         });
 
-        printcard.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GenerateStudentBarCode.this, "Process Started", Toast.LENGTH_SHORT).show();
-                saveBitmapToFile(getBitmapFromView(cardView), regno.getText().toString().toString());
+                dispatchTakePictureIntent();
             }
         });
     }
-    public Bitmap getBitmapFromView(View view) {
-        // Measure the view and its content to determine the resulting bitmap size.
-        int desiredWidth = 759; // in pixels
-        int desiredHeight = 420;
 
-
-        // Adjust layout parameters of the CardView
-        ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
-        layoutParams.width = desiredWidth;
-        layoutParams.height = desiredHeight;
-        cardView.setLayoutParams(layoutParams);
-
-        // Measure and layout the view
-        cardView.measure(View.MeasureSpec.makeMeasureSpec(desiredWidth, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(desiredHeight, View.MeasureSpec.EXACTLY));
-        cardView.layout(0, 0, cardView.getMeasuredWidth(), cardView.getMeasuredHeight());
-
-
-
-        Bitmap bitmap = Bitmap.createBitmap(desiredWidth, desiredHeight, Bitmap.Config.ARGB_8888);
-
-        // Create a canvas with the bitmap
-        Canvas canvas = new Canvas(bitmap);
-        cardView.layout(0, 0, desiredWidth, desiredHeight);
-        cardView.draw(canvas);
-
-        return bitmap;
-    }
-    public void saveBitmapToFile(Bitmap bitmap, String filename) {
-        // Get external storage directory.
-        File externalStorageDirectory = Environment.getExternalStorageDirectory();
-
-        // Create a directory for storing images if it doesn't exist.
-        File imagesDirectory = new File(externalStorageDirectory, "IdCards");
-        if (!imagesDirectory.exists()) {
-            Toast.makeText(this, "if condition", Toast.LENGTH_SHORT).show();
-            imagesDirectory.getParentFile().mkdir();
-        }
-
-        // Create a file to save the Bitmap image.
-        File imageFile = new File(imagesDirectory, filename+".jpg");
-
-        // Open an OutputStream to write the Bitmap data.
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            // Inform the user that the image has been saved.
-            Toast.makeText(this, "Image saved successfully", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "gg "+e.getMessage(), Toast.LENGTH_SHORT).show();
-        } finally {
-            try {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            takePictureIntent.putExtra("crop", "true");
+//            takePictureIntent.putExtra("aspectX", 1);
+//            takePictureIntent.putExtra("aspectY", 1);
+//            takePictureIntent.putExtra("outputX", 1000); // Set your desired width here
+//            takePictureIntent.putExtra("outputY", 1000); // Set your desired height here
+//            takePictureIntent.putExtra("scale", true);
+//            takePictureIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+
+            imageView.setDrawingCacheEnabled(true);
+            imageView.buildDrawingCache();
+
+            bitmap = imageBitmap;
+//                    imageView.getDrawingCache();
+
+            // Convert the Bitmap to a byte array
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 30, byteArrayOutputStream);
+//            byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+            // Convert the byte array to a Base64 string
+//            base64Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+    }
 }

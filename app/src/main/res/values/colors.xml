@@ -4,6 +4,7 @@
     <color name="mid_black">#1C1B1B</color>
     <color name="grey">#504B4B</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white_fade">#CDFFFFFF</color>
     <color name="off_white">#F0EBEB</color>
     <color name="red">#F44336</color>
     <color name="blue">#3F51B5</color>

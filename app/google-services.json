@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "838817517456",
+    "project_id": "sv-system-3e6e0",
+    "storage_bucket": "sv-system-3e6e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838817517456:android:9e614c9adcb7c03a626d15",
+        "android_client_info": {
+          "package_name": "com.example.sv_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM-Q73k5wCZPHN_iaYBh8Tt6UVmiHPasY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

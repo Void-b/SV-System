@@ -5,6 +5,7 @@
          <item name="colorPrimary">@color/green</item>
          <item name="colorSecondary">@color/green</item>
          <item name="android:colorAccent">@color/orange</item>
+        <item name="android:textColorTertiary">@color/white</item>
     </style>
 
     <style name="Theme.SVSystem" parent="Base.Theme.SVSystem" />

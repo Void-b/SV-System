@@ -5,8 +5,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-    <uses-feature
-        android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -27,7 +26,7 @@
         android:theme="@style/Theme.SVSystem"
         tools:targetApi="31">
         <activity
-            android:name=".CustomScannerActivity"
+            android:name=".PreviewSave"
             android:exported="false" />
         <activity
             android:name=".GenerateStudentBarCode"
